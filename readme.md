@@ -73,15 +73,12 @@ For the following figures red lines represent ground truth boundaries and blue l
 
 * Model predictions for some stage 1 test image samples:
 <p float="left">
-<img width="300" height="300" src="images/sample_1.png"/>
-<img width="300" height="300" src="images/sample_2.png"/>
-<img width="300" height="300" src="images/sample_3.png"/>
+<img width="200" height="200" src="images/sample_1.png"/><img width="200" height="200" src="images/sample_2.png"/><img width="200" height="200" src="images/sample_3.png"/>
 </p>
 
 * Model predictions for some stage 2 test image samples:
 <p float="left">
-<img width="300" height="300" src="images/sample_4.png" /><img width="300" height="300" src="images/sample_5.png"/>
-<img width="300" height="300" src="images/sample_6.png"/>
+<img width="200" height="200" src="images/sample_4.png" /><img width="200" height="200" src="images/sample_5.png"/><img width="200" height="200" src="images/sample_6.png"/>
 </p>
 
 # Appendix
