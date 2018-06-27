@@ -84,7 +84,7 @@ For the following figures red lines represent ground truth boundaries and blue l
 # Appendix
 
 
-## A1. Model Execution Time##
+## A1. Model Execution Time
 
 The following execution times are measured on Nvidia P100 GPUs provided by [Ohio Supercomputer Center](2)
 

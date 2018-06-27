@@ -7,7 +7,7 @@ Licensed under the MIT License (see LICENSE for details)
 Written by Waleed Abdulla
 https://github.com/matterport/Mask_RCNN
 
-New augme functions by Inom Mirzaev:
+New augmentation functions by Inom Mirzaev:
 
 - fix_crop_transform
 - random_crop_transform
@@ -15,7 +15,7 @@ New augme functions by Inom Mirzaev:
 - relabel_multi_mask
 - clean_masks
 
-* load_image_gt function is completed modified to wrap the above functions
+* load_image_gt function is completely modified to wrap the above functions
 * train and compile methods for MaskRCNN class have been also modified
 
 """

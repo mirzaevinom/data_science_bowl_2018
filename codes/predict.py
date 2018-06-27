@@ -55,7 +55,9 @@ def prob_to_rles(masks, height, width):
 
 
 def plot_boundary(image, true_masks=None, pred_masks=None, ax=None):
-
+    """
+    Plots provided boundaries of nuclei for a given image.
+    """
     if ax is None:
         n_rows = 1
         n_cols = 1
@@ -86,6 +88,9 @@ def plot_boundary(image, true_masks=None, pred_masks=None, ax=None):
 
 
 def plot_train(train_path='../data/stage1_train/'):
+    """
+    Plot and save true boundaries of nuclei for each training image
+    """
 
     if not os.path.isdir('../train_images'):
         os.mkdir('../train_images')
@@ -111,6 +116,9 @@ def plot_train(train_path='../data/stage1_train/'):
 
 def get_model(config, model_path=None):
 
+    """
+    Loads and returns MaskRCNN model for a given config and weights.
+    """
     model = modellib.MaskRCNN(mode="inference",
                               config=config,
                               model_dir=MODEL_DIR)
@@ -140,6 +148,7 @@ def get_model(config, model_path=None):
 
 
 def ensemble_prediction(model, config, image):
+
     """ Test time augmentation method using non-maximum supression"""
 
     masks = []
@@ -191,6 +200,7 @@ def ensemble_prediction(model, config, image):
 
 
 def cluster_prediction(model, config, image):
+
     """ Test time augmentation method using bounding box IoU"""
     # from utils import non_max_suppression, extract_bboxes, compute_overlaps
     height, width = image.shape[:2]
@@ -227,28 +237,12 @@ def cluster_prediction(model, config, image):
         else:
             result1['masks'][:, :, mm] = 0
 
-    # temp_img = np.flipud(image)
-    # result2 = model.detect([temp_img], verbose=0 , mask_threshold = mask_threshold)[0]
-    # result2['masks'] = np.flipud(result2['masks'])
-    #
-    # overlaps = utils.compute_overlaps_masks(result1['masks'], result2['masks'])
-    #
-    # for mm in range(overlaps.shape[0]):
-    #
-    #     if np.max(overlaps[mm])>0.1:
-    #         ind = np.argmax( overlaps[mm] )
-    #         mask = result1['masks'][:,:,mm] + result2['masks'][:,:, ind]
-    #         result1['masks'][:,:,mm] = (mask>0).astype(np.uint8)
-    #         result1['scores'][mm] = 0.5*(result1['scores'][mm]+result2['scores'][ind])
-    #     else:
-    #         result1['masks'][:,:,mm] = 0
-
     return result1
 
 
 def postprocess_masks(result, image, min_nuc_size=10):
 
-    """Clean overlap between bounding boxes, fill small holes, smooth boundaries"""
+    """Clean overlaps between bounding boxes, fill small holes, smooth boundaries"""
 
     height, width = image.shape[:2]
 
@@ -445,12 +439,12 @@ if __name__ == '__main__':
 
 
     # Ininitialize validation dataset
-    # train_path = '../data/stage1_train/'
-    # train_list, val_list = train_validation_split(
-    #     train_path, seed=11, test_size=0.1)
-    # dataset_val = KaggleDataset()
-    # dataset_val.load_shapes(val_list, train_path)
-    # dataset_val.prepare()
+    train_path = '../data/stage1_train/'
+    train_list, val_list = train_validation_split(
+        train_path, seed=11, test_size=0.1)
+    dataset_val = KaggleDataset()
+    dataset_val.load_shapes(val_list, train_path)
+    dataset_val.prepare()
 
     # initialize stage 1  testing dataset
     dataset_val = KaggleDataset()
@@ -459,13 +453,14 @@ if __name__ == '__main__':
     dataset_val.load_shapes(val_list, val_path)
     dataset_val.prepare()
     # Evaluate the model performance and plot boundaries for the predictions
-    # eval_n_plot_val(model, config, dataset_val, save_plots=True)
+    eval_n_plot_val(model, config, dataset_val, save_plots=True)
 
     # Predict and plot boundaries for stage1 test
-    # pred_n_plot_test(model, config, test_path='../data/stage1_test/', save_plots=True)
+    pred_n_plot_test(model, config, test_path='../data/stage1_test/', save_plots=True)
     # Predict and plot boundaries for stage2 test
     pred_n_plot_test(model, config, test_path='../data/stage2_test_final/', save_plots=True)
 
+    # Save supercomputer log file locally
     if 'PBS_JOBID' in os.environ.keys():
         job_id = os.environ['PBS_JOBID'][:7]
         fileList = list(filter(lambda x: job_id in x, os.listdir('./')))

@@ -123,7 +123,7 @@ if __name__ == '__main__':
 
     start = time.time()
 
-
+    # Split the training set into training and validation
     train_list, val_list = train_validation_split(
         train_path, seed=11, test_size=0.1)
 
@@ -132,7 +132,7 @@ if __name__ == '__main__':
     dataset_train.load_shapes(train_list, train_path)
     dataset_train.prepare()
 
-    # ini validation dataset
+    # initialize validation dataset
     dataset_val = KaggleDataset()
     dataset_val.load_shapes(val_list, train_path)
     dataset_val.prepare()
@@ -162,6 +162,8 @@ if __name__ == '__main__':
         model.load_weights(weights_path, by_name=True)
 
     print('Loading weights from ', weights_path)
+
+    # Train the model for 75 epochs
 
     model.train(dataset_train, dataset_val,
                 learning_rate=1e-4,
