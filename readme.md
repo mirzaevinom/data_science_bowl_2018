@@ -51,7 +51,7 @@ For this competition, I modified [Matterport's](https://github.com/matterport/Ma
     - If this intersection removal results in multiple objects in that mask, then removing all the small pieces.
 - Closing small holes inside the masks using morphological operations (dilation followed by erosion).
 
-## Interesting findings ##
+## Interesting findings
 
 - Mask-RCNN model overfits easily without image augmentation.
 - Removing false positive mask predictions improves the overall score significantly.
@@ -72,17 +72,17 @@ For this competition, I modified [Matterport's](https://github.com/matterport/Ma
 For the following figures red lines represent ground truth boundaries and blue lines represent prediction boundaries.
 
 * Model predictions for some stage 1 test image samples:
-
-<img width="300" height="300" src="images/sample_1.png">
-<img width="300" height="300" src="images/sample_2.png">
-<img width="300" height="300" src="images/sample_3.png">
+<p float="left">
+<img width="300" height="300" src="images/sample_1.png"/>
+<img width="300" height="300" src="images/sample_2.png"/>
+<img width="300" height="300" src="images/sample_3.png"/>
+</p>
 
 * Model predictions for some stage 2 test image samples:
-
-<img width="300" height="300" src="images/sample_4.png">
-<img width="300" height="300" src="images/sample_5.png">
-<img width="300" height="300" src="images/sample_6.png">
-
+<p float="left">
+<img width="300" height="300" src="images/sample_4.png" /><img width="300" height="300" src="images/sample_5.png"/>
+<img width="300" height="300" src="images/sample_6.png"/>
+</p>
 
 # Appendix
 
