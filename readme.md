@@ -5,23 +5,23 @@ This repository contains scripts of my solution to [The 2018 Data Science Bowl](
 
 ## Model overview
 
-For this competition, I modified [Matterport's](https://github.com/matterport/Mask_RCNN) implementation of [Mask-RCNN](3) deep neural network for object instance segmentation. I adapted the existing model configurations to detect small nuclei in images with varying size and modality. To ensure that the model doesn't overfit, I used an [external dataset](4) and relied heavily on image augmentation. Moreover, generated mosaics from train images based on [this notebook](8). To improve generalizability of the model, I split (using stratification) the `stage1_train` dataset into train and validation sets based on 5 image modalities provided by [Allen Goodman](5). After training the model using Resnet101 as a backbone encoder and Adam as an optimizer, I improved prediction accuracy by test time augmentation and post-processing the masks.
+For this competition, I modified [Matterport's](https://github.com/matterport/Mask_RCNN) implementation of [Mask-RCNN](https://arxiv.org/abs/1703.06870) deep neural network for object instance segmentation. I adapted the existing model configurations to detect small nuclei in images with varying size and modality. To ensure that the model doesn't overfit, I used an [external dataset](https://www.kaggle.com/voglinio/external-h-e-data-with-mask-annotations) and relied heavily on image augmentation. Moreover, generated mosaics from train images based on [this notebook](https://www.kaggle.com/bonlime/train-test-image-mosaic). To improve generalizability of the model, I split (using stratification) the `stage1_train` dataset into train and validation sets based on 5 image modalities provided by [Allen Goodman](https://www.kaggle.com/c/data-science-bowl-2018/discussion/48130). After training the model using Resnet101 as a backbone encoder and Adam as an optimizer, I improved prediction accuracy by test time augmentation and post-processing the masks.
 
 ## Training Method(s)
 
 ### Pre-processing
-- I noticed some issues with the provided masks. Therefore, used the annotations and mask provided by [Konstantin Lopuhin](15) in [data quality issues](14) thread.
+- I noticed some issues with the provided masks. Therefore, used the annotations and mask provided by [Konstantin Lopuhin](https://github.com/lopuhin/kaggle-dsbowl-2018-dataset-fixes) in [data quality issues](https://www.kaggle.com/c/data-science-bowl-2018/discussion/47572) thread.
 - Removed the alpha channel from the images.
 - Filled holes in the masks
-- Split (using stratification) the `stage1_train` dataset into 90% train and 10% validation sets based on 5 image modalities provided by [Allen Goodman](5).
-- Used an [external dataset](4) provided in the forum. Divided the images and the masks into 4 pieces due their large sizes. External dataset [download links](19).
-- Generated mosaics from train images based on [Emil's](8) notebook.
+- Split (using stratification) the `stage1_train` dataset into 90% train and 10% validation sets based on 5 image modalities provided by [Allen Goodman](https://www.kaggle.com/c/data-science-bowl-2018/discussion/48130).
+- Used an [external dataset](https://www.kaggle.com/voglinio/external-h-e-data-with-mask-annotations) provided in the forum. Divided the images and the masks into 4 pieces due their large sizes. External dataset [download links](https://nucleisegmentationbenchmark.weebly.com/dataset.html).
+- Generated mosaics from train images based on [Emil's](https://www.kaggle.com/bonlime/train-test-image-mosaic) notebook.
 
 
 ### Model and Training
-* Modified [Matterport's](1) implementation of [Mask-RCNN](3) deep neural network for object instance segmentation.
-* Tuned hyperparameters to detect small nuclei from the images. (I found [this tutorial](7) very useful for understanding the model hyperparameters)
-    + Original Matterport implementation was validating only on one image so fixed this [validation issue](20).
+* Modified [Matterport's](https://github.com/matterport/Mask_RCNN) implementation of [Mask-RCNN](https://arxiv.org/abs/1703.06870) deep neural network for object instance segmentation.
+* Tuned hyperparameters to detect small nuclei from the images. (I found [this tutorial](https://engineering.matterport.com/splash-of-color-instance-segmentation-with-mask-r-cnn-and-tensorflow-7c761e238b46) very useful for understanding the model hyperparameters)
+    + Original Matterport implementation was validating only on one image so fixed this [validation issue](https://github.com/matterport/Mask_RCNN/issues/89).
     + Reduced RPN (region proposal network) anchor sizes since the nuclei are mostly small.
     + Increased number of anchors to be used since the nuclei are small and can be found anywhere on an image.
     + Increased maximum number of predicted objects since an image can contain 300 or more nuclei.
@@ -31,12 +31,12 @@ For this competition, I modified [Matterport's](https://github.com/matterport/Ma
 * Relied heavily on image augmentation due to small training set:
     - Random horizontal or vertical flips
     - Random 90 or -90 degrees rotation
-    - [Random rotations](18) in the range of (-15, 15) degrees
-    - [Random cropping](18) of bigger images and masks to 256x256x3.
-    - [Random scaling](18) of image and mask scaling in the range (0.5, 2.0)
+    - [Random rotations](https://www.kaggle.com/c/data-science-bowl-2018/discussion/49692) in the range of (-15, 15) degrees
+    - [Random cropping](https://www.kaggle.com/c/data-science-bowl-2018/discussion/49692) of bigger images and masks to 256x256x3.
+    - [Random scaling](https://www.kaggle.com/c/data-science-bowl-2018/discussion/49692) of image and mask scaling in the range (0.5, 2.0)
 
-* Used Resnet101 architecture as a backbone encoder but initialized the first 50 layers of the model with pre-trained Resnet50 weights from [ImageNet competition](16).
-* Trained the model with [Adam](17) optimizer for 75 epochs:
+* Used Resnet101 architecture as a backbone encoder but initialized the first 50 layers of the model with pre-trained Resnet50 weights from [ImageNet competition](https://github.com/fchollet/deep-learning-models/releases/).
+* Trained the model with [Adam](https://arxiv.org/abs/1412.6980) optimizer for 75 epochs:
     - 25 epochs with learning rate 1e-4
     - 25 epochs with learning rate 1e-5
     - 25 epochs with learning rate 1e-6
@@ -57,7 +57,7 @@ For this competition, I modified [Matterport's](https://github.com/matterport/Ma
 - Removing false positive mask predictions improves the overall score significantly.
 - Since images are on different scales, predicting masks on scaled images helps with the model generalizability.
 - Dilating and then eroding individual masks helped me achieve slightly better result.
-- Matterport's original implementation was only [validating on only one image](6). Fixing this issue made the training process reproducible.
+- Matterport's original implementation was only [validating on only one image](https://github.com/matterport/Mask_RCNN/issues/89). Fixing this issue made the training process reproducible.
 - I found that the model reaches a local minima faster when trained using Adam optimizer compared to default SGD optimizer.
 
 ## Unsuccessful approaches tried
@@ -86,7 +86,7 @@ For the following figures red lines represent ground truth boundaries and blue l
 
 ## A1. Model Execution Time
 
-The following execution times are measured on Nvidia P100 GPUs provided by [Ohio Supercomputer Center](2)
+The following execution times are measured on Nvidia P100 GPUs provided by [Ohio Supercomputer Center](https://www.osc.edu/)
 
 + Each training epoch takes about 12 minutes.
 + It takes about 15 hours to train the model from scratch.
@@ -104,7 +104,7 @@ The codes are written in Python (3.6.3) and tested on  Red Hat Enterprise Linux 
 
 ## A3.  How To Generate the Solution
 
-1. Download/extract/place the training (external dataset [download links][10]) datasets in the following folder structure:
+1. Download/extract/place the training (external dataset [download links](https://nucleisegmentationbenchmark.weebly.com/dataset.html) ) datasets in the following folder structure:
 
 ~~~~~~~
         project
