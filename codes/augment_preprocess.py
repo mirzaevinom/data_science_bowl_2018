@@ -465,13 +465,16 @@ if __name__ == '__main__':
 
     start = time.time()
 
+    data_to_array()
+
     annot_path = '../data/external/annotations/'
     tissue_path = '../data/external/tissue_images/'
     train_path = '../data/stage1_train/'
+
     preprocess_external_data(annot_path, tissue_path, train_path)
 
     make_n_save_mosaic()
 
-    data_to_array()
+
 
     print('Elapsed time', round((time.time() - start)/60, 1), 'minutes')
