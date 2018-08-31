@@ -157,7 +157,7 @@ def data_to_array(train_path='../data/stage1_train/'):
     """ Save masks as h5 files to make trainig faster"""
 
     train_ids = list(
-        filter(lambda x: 'mosaic' not in x, os.listdir(train_path)))
+        filter(lambda x: ('mosaic' not in x) and ('TCGA' not in x), os.listdir(train_path)))
 
     for i, id_ in enumerate(train_ids):
         path = train_path + id_
