@@ -2,6 +2,7 @@
 
 This repository contains scripts of my solution to [The 2018 Data Science Bowl](https://www.kaggle.com/c/data-science-bowl-2018). Goal of the competition was to create an algorithm to automate nucleus detection from biomedical images.
 
+Weights are now available [here](https://www.dropbox.com/s/1kql7tsug876xfn/kaggle_bowl.h5?dl=0).
 
 ## Model overview
 
